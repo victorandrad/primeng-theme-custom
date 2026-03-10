@@ -1,0 +1,32 @@
+name: Automated Figma To PrimeNG Theme Code
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "tokens.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-theme:
+    name: Generate PrimeNG Theme Code
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate Prime Theme
+        uses: primefaces/figma-to-theme-code-generator@v1
+        with:
+          designer-secret: ${{ secrets.THEME_DESIGNER_SECRET_KEY }}
+          theme-name: "acme"
+          project: "primeng"
+          font-size: "14px"
+          font-family: "Inter Var"
+          tokens-path: "tokens.json"
+          output-dir: "./acme-theme"
